@@ -1,4 +1,5 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import apiClient from "../interceptor"
 
 // list all the users herer
 const Home = () => {
@@ -37,6 +38,30 @@ const Home = () => {
       { id: 211, name: "Bob Smith" },
       { id: 109, name: "Charlie Brown" },
    ])
+
+   const [loading, setLoading] = useState(false)
+
+   // const fetchData = async () => {
+   //    setLoading(true)
+   //    try {
+   //       const resp = await apiClient("allUsers")
+   //       setUsers(resp.data)
+   //    } catch (error) {
+   //       console.log("Error fetching data: ", error)
+   //    }
+   //    setLoading(false)
+   // }
+
+   // useEffect(() => {
+   //    fetchData()
+   // }, [])
+
+   if (loading)
+      return (
+         <div className="h-[100%] w-[100%] flex justify-center items-center">
+            <span className="loading loading-spinner loading-lg" />
+         </div>
+      )
 
    return (
       <div className="h-[100%] w-[100%] px-20 py-10 overflow-y-auto">
