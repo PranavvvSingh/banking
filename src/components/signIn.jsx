@@ -1,8 +1,8 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import AuthHeader from './authHeader';
-import { useLocalStorage } from './../hooks/useLocalStorage';
-import apiClient from "../interceptor";
+import AuthHeader from "./authHeader"
+import { useLocalStorage } from "./../hooks/useLocalStorage"
+import apiClient from "../interceptor"
 
 const SignIn = () => {
    const [email, setEmail] = useState("")
@@ -10,25 +10,33 @@ const SignIn = () => {
    const [password, setPassword] = useState("")
    const navigate = useNavigate()
    const [, setToken] = useLocalStorage("jwtToken", null)
+   const [success, setSuccess] = useState(false)
+   const [error, setError] = useState(false)
 
    const redirectToLogIn = () => {
       navigate("/log-in")
    }
 
-   const userSignIn = async() => {
-       try {
-          const response = await apiClient.post("/users/register", {
-             username,
-             password,
-             email
-          })
-          const token = response.data.token 
-          setToken("jwtToken: ", token)
-          console.log("Signin successful")
-          navigate("/")
-       } catch (error) {
-          console.error("Signin failed:", error.response?.data || error.message)
-       }
+   const userSignIn = async () => {
+      setSuccess(false)
+      setError(false)
+      try {
+         const response = await apiClient.post("/users/register", {
+            username,
+            password,
+            email,
+         })
+         const token = response.data.token
+         setToken("jwtToken: ", token)
+         console.log("Signin successful")
+         setSuccess(true)
+         setTimeout(() => {
+            navigate("/")
+         }, 1500)
+      } catch (error) {
+         setError(true)
+         console.error("Signin failed:", error.response?.data || error.message)
+      }
    }
 
    return (
@@ -93,7 +101,10 @@ const SignIn = () => {
                         onChange={(e) => setPassword(e.target.value)}
                      />
                   </label>
-                  <button className="btn uppercase text-white bg-blue-600 hover:bg-transparent hover:text-blue-600 btn-primary" onClick={userSignIn}>
+                  <button
+                     className="btn uppercase text-white bg-blue-600 hover:bg-transparent hover:text-blue-600 btn-primary"
+                     onClick={userSignIn}
+                  >
                      Sign In
                   </button>
                   <p className="text-sm text-center text-neutral-800">
@@ -108,6 +119,20 @@ const SignIn = () => {
                </div>
             </div>
          </div>
+         {success && (
+            <div className="toast">
+               <div className="alert alert-info bg-green-700 ps-7 text-white">
+                  <span>Sign-in successful!</span>
+               </div>
+            </div>
+         )}
+         {error && (
+            <div className="toast">
+               <div className="alert alert-info bg-red-700 ps-7 text-white">
+                  <span>Error signing in!</span>
+               </div>
+            </div>
+         )}
       </div>
    )
 }

@@ -9,12 +9,16 @@ const LogIn = () => {
    const [password, setPassword] = useState("")
    const navigate = useNavigate()
    const [, setToken] = useLocalStorage("jwtToken", null)
+   const [success, setSuccess] = useState(false)
+   const [error, setError] = useState(false)
 
    const redirectToSignIn = () => {
       navigate("/sign-in")
    }
 
    const userLogIn = async () => {
+      setSuccess(false)
+      setError(false)
       try {
          const response = await apiClient.post("/users/login", {
             username,
@@ -23,8 +27,12 @@ const LogIn = () => {
          const token = response.data.token
          setToken("jwtToken: ", token)
          console.log("Login successful")
-         navigate("/")
+         setSuccess(true)
+         setTimeout(() => {
+            navigate("/")
+         }, 1500)
       } catch (error) {
+         setError(true)
          console.error("Login failed:", error.response?.data || error.message)
       }
    }
@@ -91,6 +99,20 @@ const LogIn = () => {
                </div>
             </div>
          </div>
+         {success && (
+            <div className="toast">
+               <div className="alert alert-info bg-green-700 ps-7 text-white">
+                  <span>Login successful!</span>
+               </div>
+            </div>
+         )}
+         {error && (
+            <div className="toast">
+               <div className="alert alert-info bg-red-700 ps-7 text-white">
+                  <span>Error logging in!</span>
+               </div>
+            </div>
+         )}
       </div>
    )
 }
