@@ -2,9 +2,9 @@ import { useState, useEffect } from "react"
 
 function getStorageValue(key, defaultValue) {
    const saved = localStorage.getItem(key)
-   if(saved===undefined) return defaultValue
    const initial = JSON.parse(saved)
-   return initial
+   console.log(initial)
+   return initial || defaultValue
 }
 
 export const useLocalStorage = (key, defaultValue) => {
@@ -14,6 +14,9 @@ export const useLocalStorage = (key, defaultValue) => {
 
    useEffect(() => {
       localStorage.setItem(key, JSON.stringify(value))
+      return () => {
+         localStorage.clear()
+      }
    }, [key, value])
 
    return [value, setValue]

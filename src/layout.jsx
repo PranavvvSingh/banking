@@ -4,10 +4,12 @@ import { useLocalStorage } from "./hooks/useLocalStorage"
 
 const Layout = () => {
    const [token] = useLocalStorage("jwtToken", null)
-   console.log(token)
+
    if (!token) {
+      console.log("token not found: ", token)
       return <Navigate to="/log-in" />
    }
+
    return (
       <div className="h-[100vh] w-[100vw] flex flex-col m-0 overflow-x-hidden">
          <Header />
