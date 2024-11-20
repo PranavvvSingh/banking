@@ -10,7 +10,7 @@ const Home = () => {
    const fetchData = async () => {
       setLoading(true)
       try {
-         const resp = await apiClient("allUsers")
+         const resp = await apiClient("users/all")
          setUsers(resp.data)
       } catch (error) {
          console.log("Error fetching data: ", error)
