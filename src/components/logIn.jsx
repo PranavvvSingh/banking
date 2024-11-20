@@ -1,15 +1,14 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import AuthHeader from "./authHeader"
-import apiClient from './../interceptor';
-import { useLocalStorage } from './../hooks/useLocalStorage';
+import apiClient from "./../interceptor"
+import { useLocalStorage } from "./../hooks/useLocalStorage"
 
 const LogIn = () => {
-   const [username,setUsername]= useState("")
+   const [username, setUsername] = useState("")
    const [password, setPassword] = useState("")
    const navigate = useNavigate()
    const [, setToken] = useLocalStorage("jwtToken", null)
-
 
    const redirectToSignIn = () => {
       navigate("/sign-in")
@@ -17,11 +16,12 @@ const LogIn = () => {
 
    const userLogIn = async () => {
       try {
-         const response = await apiClient.post("/users/register", null, {
-            params: { username, password,},
+         const response = await apiClient.post("/users/login", {
+            username,
+            password,
          })
-         const token = response.data
-         setToken("jwtToken", token)
+         const token = response.data.token
+         setToken("jwtToken: ", token)
          console.log("Login successful")
          navigate("/")
       } catch (error) {
@@ -73,7 +73,10 @@ const LogIn = () => {
                         onChange={(e) => setPassword(e.target.value)}
                      />
                   </label>
-                  <button className="btn uppercase text-white bg-blue-600 hover:bg-transparent hover:text-blue-600 btn-primary" onClick={userLogIn}>
+                  <button
+                     className="btn uppercase text-white bg-blue-600 hover:bg-transparent hover:text-blue-600 btn-primary"
+                     onClick={userLogIn}
+                  >
                      Log In
                   </button>
                   <p className="text-sm text-center text-neutral-800">

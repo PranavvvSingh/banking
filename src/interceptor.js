@@ -1,9 +1,7 @@
 import axios from "axios"
 
-const BASE_URL = import.meta.VITE_BASE_URL
-
 const apiClient = axios.create({
-   baseURL: BASE_URL, // Backend base URL
+   baseURL: "http://localhost:8080/", // Backend base URL
 })
 
 

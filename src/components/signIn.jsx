@@ -17,11 +17,13 @@ const SignIn = () => {
 
    const userSignIn = async() => {
        try {
-          const response = await apiClient.post("/users/register", null, {
-             params: { username, password, email },
+          const response = await apiClient.post("/users/register", {
+             username,
+             password,
+             email
           })
-          const token = response.data 
-          setToken("jwtToken", token)
+          const token = response.data.token 
+          setToken("jwtToken: ", token)
           console.log("Signin successful")
           navigate("/")
        } catch (error) {
